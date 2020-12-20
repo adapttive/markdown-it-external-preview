@@ -1,0 +1,123 @@
+<div class="examples__frame">
+    <div class="examples__header flex hide-for-small">
+        <div class="examples__buttons">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="examples__header-title">
+            <div>src/pages/Blog.vue</div>
+        </div>
+    </div>
+    <div class="examples__code">
+        <div>
+            <pre class="language-html">
+                <code class="language-html">
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;</span>template
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;</span>Layout
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;</span>h1
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+                    My blog
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;/</span>h1
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;</span>div
+                        </span>
+                        <span class="token attr-name">v-for</span>
+                        <span class="token attr-value">
+                            <span class="token punctuation attr-equals">=</span>
+                            <span class="token punctuation">"</span>
+                            {node} in $page.allPost.edges
+                            <span class="token punctuation">"</span>
+                        </span>
+                        <span class="token attr-name">:key</span>
+                        <span class="token attr-value">
+                            <span class="token punctuation attr-equals">=</span>
+                            <span class="token punctuation">"</span>node.id
+                            <span class="token punctuation">"</span>
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;</span>h3
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+                    {{node.title}}
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;/</span>h3
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;</span>g-link
+                        </span>
+                        <span class="token attr-name">:to</span>
+                        <span class="token attr-value">
+                            <span class="token punctuation attr-equals">=</span>
+                            <span class="token punctuation">"</span>node.path
+                            <span class="token punctuation">"</span>
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+                    Read more
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;/</span>g-link
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;/</span>div
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;/</span>Layout
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;/</span>template
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+
+                    <span class="token comment">&lt;!-- Query from local GraphQL data layer. --&gt;</span>
+                    <span class="token tag">
+                        <span class="token tag"><span class="token punctuation">&lt;</span>page-query
+                        </span>
+                        <span class="token punctuation">&gt;</span>
+                    </span>
+                    <span class="token graphql">
+                        <span class="token keyword">query</span>
+                        <span class="token punctuation">{</span>
+                            allPost <span class="token punctuation">{</span>
+                            edges <span class="token punctuation">{</span>
+                            node <span class="token punctuation">{</span>
+                            id
+                            title
+                            path
+                            <span class="token punctuation">}</span>
+                            <span class="token punctuation">}</span>
+                            <span class="token punctuation">}</span>
+                            <span class="token punctuation">}</span>
+                            </span><span class="token tag"><span class="token tag"><span
+                        class="token punctuation">&lt;/</span>page-query</span><span
+                        class="token punctuation">&gt;</span></span></code></pre>
+        </div>
+    </div>
+</div>

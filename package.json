@@ -1,0 +1,36 @@
+{
+  "name": "markdown-it-external-preview",
+  "version": "1.0.0",
+  "description": "Markdown It Plugin for external code preview",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adapttive/markdown-it-external-preview.git"
+  },
+  "keywords": [
+    "markdown-it-plugin",
+    "markdown-it",
+    "code",
+    "markdown",
+    "github"
+  ],
+  "author": {
+    "name": "milindsingh",
+    "email": "milind7@live.com",
+    "url": "https://adapttive.com/milind"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adapttive/markdown-it-external-preview/issues"
+  },
+  "homepage": "https://github.com/adapttive/markdown-it-external-preview#readme",
+  "devDependencies": {
+    "markdown-it": "^12.0.3"
+  },
+  "dependencies": {
+    "sync-request": "^6.1.0"
+  }
+}
