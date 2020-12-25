@@ -112,7 +112,7 @@ function externalPreviewTokenize(md, options)
         let content = tokens[idx].externalPreviewContent;
         if (type === 'code') {
             let language = options.code.type ? options.code.type : getLanguage(tokens[idx].externalPreviewPath);
-            let code = "";
+            let code;
             if (options.code.use_prism && bn.isNode) {
                 const Prism = require('prismjs');
                 require("prismjs/components/")();
@@ -122,16 +122,19 @@ function externalPreviewTokenize(md, options)
                 // loadLanguages([language]);
 
                 if (Prism.languages[language]) {
-                    code = Prism.highlight(content, Prism.languages[language], language);
+                    content = Prism.highlight(content, Prism.languages[language], language);
                 } else {
-                    code = Prism.util.encode(content);
+                    content = Prism.util.encode(content);
                 }
-                code = `<div class="language-${language}">${code}</div>`;
-            } else {
-                code = `<pre class="language-${language}">
-                <code class="language-${language}">${content}</code>
-                </pre>`;
             }
+
+            code = `<div class="examples__code">
+                        <div>
+                            <pre class="language-${language}">
+                                <code class="language-${language}">${content}</code>
+                            </pre>
+                        </div>
+                     </div>`;
             return build(options, code, tokens[idx].externalPreviewPath, tokens[idx].externalPreviewUrl);
         }
 
