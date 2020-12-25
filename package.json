@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-external-preview",
-  "version": "1.0.0-alpha.10",
+  "version": "1.0.0",
   "description": "Markdown It Plugin for external code preview",
   "main": "dist/index.js",
   "scripts": {
