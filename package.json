@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-external-preview",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Markdown It plugin for external code preview",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,8 @@
     "markdown-it",
     "code",
     "markdown",
-    "github"
+    "github",
+    "prismjs"
   ],
   "author": "milindsingh <milind7@live.com> (https://adapttive.com/milind)",
   "license": "MIT",

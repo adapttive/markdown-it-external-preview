@@ -8,34 +8,37 @@ const defaults = {
         use_prism: true,
         add_container: true,
         container: {
-            class1: "examples flex flex-align-top",
-            class2: "examples__frame",
+            class_prefix: "external-preview",
+            class1: "flex flex-align-top",
+            class2: "frame",
             add_header: true,
             header: {
-                class: "examples__header flex hide-for-small",
+                class: "header flex hide-for-small",
                 add_dots: true,
                 dots: {
-                    class: "examples__buttons",
+                    class: "buttons",
                     count: 3
                 },
                 add_title: true,
                 title: {
                     add_link: true,
-                    class: "examples__header-title"
+                    class: "header-title"
                 }
             },
             code: {
-                class: "examples__code",
+                class: "code",
             }
         },
         github: {
+            only_selected_lines: true,
             replacement_host: "raw.githubusercontent.com"
         },
         type: null
     }
 };
 
-const EMBED_REGEX = /@\[([a-zA-Z].+)]\([\s]*(.*?)[\s]*[)]/im;
+const EXTERNAL_PREVIEW_REGEX = /@\[([a-zA-Z].+)]\([\s]*(.*?)[\s]*[)]/im;
+const EXTERNAL_PREVIEW_LINE_NUMBER_REGEX = /(#L(\d*)-L(\d*))|(#L(\d*))/im;
 
 function externalPreview(md, options)
 {
@@ -54,7 +57,7 @@ function externalPreview(md, options)
             return false;
         }
 
-        const match = EMBED_REGEX.exec(state.src.slice(state.pos, state.src.length));
+        const match = EXTERNAL_PREVIEW_REGEX.exec(state.src.slice(state.pos, state.src.length));
 
         if (!match || match.length < 3) {
             return false;
@@ -76,6 +79,9 @@ function externalPreview(md, options)
         if (typeof content !== "string" && buffer.Buffer.isBuffer(content)) {
             content = content.toString();
         }
+
+        content = extract(options, state, content);
+
         serviceStart = oldPos + 2;
         serviceEnd = md.helpers.parseLinkLabel(state, oldPos + 1, false);
 
@@ -115,6 +121,8 @@ function externalPreviewTokenize(md, options)
             let code;
             if (options.code.use_prism && bn.isNode) {
                 const Prism = require('prismjs');
+
+                // load all grammars
                 require("prismjs/components/")();
 
                 // optimize loading of grammar
@@ -128,7 +136,9 @@ function externalPreviewTokenize(md, options)
                 }
             }
 
-            code = `<div class="examples__code">
+            let cssClassPrefix = options.code.container.class_prefix;
+            let cssClass = options.code.container.code.class;
+            code = `<div class="${cssClassPrefix} ${cssClass}">
                         <div>
                             <pre class="language-${language}">
                                 <code class="language-${language}">${content}</code>
@@ -147,6 +157,7 @@ function build(options, content, path, url)
 {
     let result = content;
     if (options.code.add_container) {
+        let cssClassPrefix = defaults.code.container.class_prefix;
         let header = "";
         if (options.code.container.add_header) {
             let dots = "";
@@ -155,7 +166,7 @@ function build(options, content, path, url)
                 for (let i = 0; i < options.code.container.header.dots.count; i++) {
                     inside += "<div></div>"
                 }
-                dots = `<div class="${options.code.container.header.dots.class}">
+                dots = `<div class="${cssClassPrefix} ${options.code.container.header.dots.class}">
                             ${inside}
                         </div>`
             }
@@ -164,24 +175,49 @@ function build(options, content, path, url)
             if (options.code.container.header.add_title) {
                 let link = path;
                 if (options.code.container.header.title.add_link) {
-                    link = `<a href="${url}">${path}</a>`;
+                    link = `<a rel="noopener noreferrer" target="_blank" href="${url}">${path}</a>`;
                 }
-                title = `<div class="${options.code.container.header.title.class}">${link}</div>`;
+                title = `<div class="${cssClassPrefix} ${options.code.container.header.title.class}">${link}</div>`;
             }
 
-            header = `<div class="${options.code.container.header.class}">
+            header = `<div class="${cssClassPrefix} ${options.code.container.header.class}">
                           ${dots}
                           ${title}
                       </div>`;
         }
-        result = `<div class="${options.code.container.class1}">
-                    <div class="${options.code.container.class2}">
+        result = `<div class="${cssClassPrefix} ${options.code.container.class1}">
+                    <div class="${cssClassPrefix} ${options.code.container.class2}">
                         ${header}
                         ${result}
                     </div>
                   </div>`;
     }
     return result;
+}
+
+function extract(options, state, content)
+{
+    if (typeof content === "string") {
+        const lines = EXTERNAL_PREVIEW_LINE_NUMBER_REGEX.exec(state.src.slice(state.pos, state.src.length));
+        let start, end;
+        if (lines[5] !== undefined) {
+            start = parseInt(lines[5]);
+            end = parseInt(lines[5]);
+        }
+
+        if (lines[2] !== undefined && lines[3] !== undefined) {
+            start = parseInt(lines[2]);
+            end = parseInt(lines[3]);
+        }
+
+        if (start && end && options.code.github.only_selected_lines) {
+            let lines = content.split('\n');
+            lines = lines.slice(start-1, end);
+            content = lines.join('\n');
+        }
+    }
+
+    return content;
 }
 
 function getLanguage(url)
