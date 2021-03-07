@@ -37,12 +37,15 @@ const defaults = {
     }
 };
 
-const EXTERNAL_PREVIEW_REGEX = /@\[([a-zA-Z].+)]\([\s]*(.*?)[\s]*[)]/im;
+const EXTERNAL_PREVIEW_REGEX = /\[(@[a-zA-Z].+)]\([\s]*(.*?)[\s]*[)]/im;
 const EXTERNAL_PREVIEW_LINE_NUMBER_REGEX = /(#L(\d*)-L(\d*))|(#L(\d*))/im;
 
 function externalPreview(md, options)
 {
     return (state, silent) => {
+        // console.log(state)
+        // console.log(silent)
+        // console.log(state.src.slice(state.pos, state.src.length))
         let contentUrl;
         let previewPath;
 
@@ -52,8 +55,8 @@ function externalPreview(md, options)
         let theState = state;
         const oldPos = state.pos;
 
-        if (state.src.charCodeAt(oldPos) !== 0x40/* @ */ ||
-            state.src.charCodeAt(oldPos + 1) !== 0x5B/* [ */) {
+        if (state.src.charCodeAt(oldPos) !== 0x5B/* @ */ ||
+            state.src.charCodeAt(oldPos + 1) !== 0x40/* [ */) {
             return false;
         }
 
