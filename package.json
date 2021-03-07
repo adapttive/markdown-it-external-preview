@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-external-preview",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Markdown It plugin for external code preview",
   "main": "index.js",
   "scripts": {
